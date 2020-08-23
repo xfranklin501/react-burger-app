@@ -7,7 +7,8 @@ import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 import axios from '../../axios-orders';
 import Spinner from '../../components/UI/Spinner/Spinner';
-import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler'
+import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
+
 
 const INGREDIENT_PRICES = {
     salad: 0.5,
@@ -88,7 +89,18 @@ class BurgerBuilder extends Component {
     }
 
     purchaseContinueHander = () => {
-        this.setState({
+
+        const queryParams = [];
+        for (let i in this.state.ingredients) {
+            queryParams.push(encodeURIComponent(i) + '=' + encodeURIComponent(this.state.ingredients[i]));
+        }
+        queryParams.push('price=' + this.state.totalPrice);
+        const queryParamsString = queryParams.join('&')
+        this.props.history.push({
+            pathname: '/checkout',
+            search: '?' + queryParamsString
+        });
+        /* this.setState({
             loading: true
         });
 
@@ -118,7 +130,7 @@ class BurgerBuilder extends Component {
                     loading: false,
                     purchasing: false,
                 });
-            })
+            }) */
         //console.log("Order Continued");
     }
 
